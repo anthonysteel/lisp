@@ -6,14 +6,12 @@
   (print (list-length tree)))
 
 (defun bst-depth (tree)
-  (if (null tree)
-    0
-    (if (atom tree)
-        1
-        (let ((left-subtree (second tree))
-              (right-subtree (third tree)))
-          (+ 1 (max (bst-depth left-subtree)
-                    (bst-depth right-subtree)))))))
+  (cond ((null tree) 0)
+        ((atom tree) 1)
+        (t (let ((left-subtree (second tree))
+                (right-subtree (third tree)))
+             (+ 1 (max (bst-depth left-subtree)
+                       (bst-depth right-subtree)))))))
 
 
 ;; Tests
