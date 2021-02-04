@@ -19,12 +19,12 @@
         (t (append (preorder (first tree))
                    (preorder (rest tree))))))
 
-(defun find-leef (value tree)
+(defun find-leaf (value tree)
   ;; Find if a value exists in a tree
   (cond ((null tree) nil)
         ((atom tree) (= tree value))
-        (t (or (find-leef value (first tree))
-               (find-leef value (rest tree))))))
+        (t (or (find-leaf value (first tree))
+               (find-leaf value (rest tree))))))
 
 (defun find-depth (depth value tree)
   ;; Find the depth of a node if the value exists in the tree
@@ -38,17 +38,25 @@
 (defun preorder-with-depths (tree)
   ;; Return the depths of each value and the value in a
   ;; preorder list
-  (loop for leef in (preorder tree)
-    collect (list (find-depth 1 leef tree) leef)))
+  (loop for leaf in (preorder tree)
+    collect (list (find-depth 1 leaf tree) leaf)))
 
 (defun sort-by-depth (tree)
   (sort (preorder-with-depth tree) #'< :key #'first))
 
-(defun pretty-print-bst (tree)
-  (dotimes (i (depth tree))
-    (loop for depth-and-value in (preorder-with-depths tree)
-          do (if (= (first depth-and-value)
-                    (+ 1 i))
-                 (format t "~A " (second depth-and-value))
-                 ))
-    (format t "~%")))
+(defun print-leaf (leaf)
+  (format t " ~A~%" leaf))
+
+(defun pretty-print-bst (depth tree)
+  (cond ((null tree) nil)
+        ((atom tree) (print-leaf tree))
+        (t (or (pretty-print-bst depth  (first tree))
+               (pretty-print-bst (+ 1 depth)  (second tree))
+               (pretty-print-bst (+ 1 depth)  (third tree))))))
+;;  (dotimes (i (depth tree))
+;;    (loop for depth-and-value in (preorder-with-depths tree)
+;;          do (if (= (first depth-and-value)
+;;                    (+ 1 i))
+;;                (format t "~A " (second depth-and-value))
+;;                 ))
+;;    (format t "~%")))
