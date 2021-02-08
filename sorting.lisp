@@ -1,12 +1,13 @@
-(defparameter arr `(43 14 15 7 8 11 -10 13))
+(defparameter arr `(43 14 15 1123 -218 11 -10 14113))
 
-;; (quicksort (butlast arr) (last arr))
-;;(defun quicksort (below-pivot above-pivot)
-;;)
-
-(defun pivot-sort (arr left pivot right)
-  (cond ((null arr) (append (append left pivot) right))
+(defun partition (arr left pivot right)
+  (cond ((null arr) (values left pivot right))
         ((> (first arr) (first pivot))
-         (pivot-sort (rest arr) left pivot (cons (first arr) right)))
+         (partition (rest arr) left pivot (cons (first arr) right)))
         ((<= (first arr) (first pivot))
-         (pivot-sort (rest arr) (cons (first arr) left) pivot right))))
+         (partition (rest arr) (cons (first arr) left) pivot right))))
+
+(defun quicksort (arr)
+  (cond ((null arr) nil)
+        (t (multiple-value-bind (left pivot right) (partition (butlast arr) nil (last arr) nil)
+            (append (append (quicksort left) pivot) (quicksort right))))))
