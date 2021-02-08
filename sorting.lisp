@@ -1,4 +1,4 @@
-(defparameter arr `(43 14 15 1123 -218 11 -10 14113))
+(defparameter arr `(43 14 15 -10 418 0 0 1231 -2132))
 
 (defun partition (arr left pivot right)
   (cond ((null arr) (values left pivot right))
@@ -11,3 +11,25 @@
   (cond ((null arr) nil)
         (t (multiple-value-bind (left pivot right) (partition (butlast arr) nil (last arr) nil)
             (append (append (quicksort left) pivot) (quicksort right))))))
+
+
+(defun compare (left right)
+  (if (< left right)
+      (list left right)
+      (list right left)))
+
+(defun split-in-half (arr left right)
+  (cond ((null arr) (values left right))
+        ((= (length arr) 1) (split-in-half nil (append left arr) right))
+        (t (split-in-half (butlast (rest arr))
+                          (append left (list (first arr)))
+                          (append (last arr) right)))))
+(defun mergesort (arr)
+  (multiple-value-bind (left right) (split-in-half arr nil nil)
+          (t (append (mergesort left) (mergesort right)))))
+
+(defun completely-split (arr)
+  (cond (null arr) nil)
+        (multiple-value-bind (left right)
+                             (split-in-half arr nil nil)
+                             (append (completely-split left) (completely-split right))))
